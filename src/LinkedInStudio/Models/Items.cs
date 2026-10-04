@@ -88,7 +88,7 @@ public sealed class TitleItem : ItemBase
 
     private string _text = "How to Handle *DateTime* in *Web API*";
     private double _fontSize = 46;
-    private string _font = "Vazirmatn, Segoe UI, Tahoma";
+    private string _font = Catalog.Vazirmatn;
     private TextDir _dir = TextDir.Auto;
 
     public string Text { get => _text; set { if (Set(ref _text, value)) { OnChanged(nameof(Inlines)); OnChanged(nameof(Flow)); } } }
@@ -153,7 +153,7 @@ public sealed class TextItem : ItemBase
     private double _fontSize = 16;
     private bool _bold;
     private string _color = "#17233F";
-    private string _font = "Vazirmatn, Segoe UI, Tahoma";
+    private string _font = Catalog.Vazirmatn;
     private TextDir _dir = TextDir.Auto;
     private TextAlignment _align = TextAlignment.Left;
 

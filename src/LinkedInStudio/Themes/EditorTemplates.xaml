@@ -31,7 +31,7 @@
             <TextBox Style="{StaticResource MultiBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="* … *  →  highlight"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Font], Source={x:Static loc:Localizer.Instance}}"/>
-            <ComboBox ItemsSource="{x:Static inf:Catalog.Fonts}" SelectedItem="{Binding Font}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.FontOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Font}"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
             <Slider Minimum="20" Maximum="80" Value="{Binding FontSize}"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
@@ -73,7 +73,7 @@
             <Slider Minimum="10" Maximum="60" Value="{Binding FontSize}"/>
             <CheckBox Content="{Binding [Props.Bold], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding Bold}" Margin="0,10,0,0"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Font], Source={x:Static loc:Localizer.Instance}}"/>
-            <ComboBox ItemsSource="{x:Static inf:Catalog.Fonts}" SelectedItem="{Binding Font}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.FontOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding Font}"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
             <ctrl:ColorPicker Color="{Binding Color, Mode=TwoWay}"/>
             <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>

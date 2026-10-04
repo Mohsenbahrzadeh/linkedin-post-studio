@@ -95,7 +95,8 @@
 
     <!-- ============ FONTS ============ -->
     <FontFamily x:Key="F.Ui">Segoe UI</FontFamily>
-    <FontFamily x:Key="F.Fa">Vazirmatn, Segoe UI, Tahoma</FontFamily>
+    <!-- Bundled Vazirmatn (OFL) so Persian renders consistently without any install. -->
+    <FontFamily x:Key="F.Fa">pack://application:,,,/Fonts/#Vazirmatn</FontFamily>
     <FontFamily x:Key="F.Code">Cascadia Code, Consolas, Courier New</FontFamily>
 
     <!-- ============ APP CONTROL STYLES ============ -->

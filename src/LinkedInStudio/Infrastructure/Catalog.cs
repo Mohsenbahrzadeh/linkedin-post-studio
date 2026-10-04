@@ -10,18 +10,22 @@ public static class Catalog
         "🧩","🛡️","📈","📊","⚡","💬","✉️","👤","🏷️","➡️","🔥","👍",
     };
 
-    public static readonly string[] Fonts =
+    /// <summary>The bundled Vazirmatn family (OFL), resolved from app resources — works without install.</summary>
+    public const string Vazirmatn = "pack://application:,,,/Fonts/#Vazirmatn";
+
+    public sealed record FontOption(string Label, string Value);
+
+    public static readonly FontOption[] FontOptions =
     {
-        "Vazirmatn, Segoe UI, Tahoma",
-        "Segoe UI",
-        "Tahoma",
-        "Calibri",
-        "Arial",
-        "Times New Roman",
-        "Cascadia Code, Consolas",
-        "Consolas",
-        "Georgia",
-        "Verdana",
+        new("Vazirmatn (Persian)", Vazirmatn),
+        new("Segoe UI", "Segoe UI"),
+        new("Tahoma", "Tahoma"),
+        new("Calibri", "Calibri"),
+        new("Arial", "Arial"),
+        new("Georgia", "Georgia"),
+        new("Verdana", "Verdana"),
+        new("Consolas (mono)", "Consolas"),
+        new("Cascadia Code (mono)", "Cascadia Code, Consolas"),
     };
 
     public static readonly string[] Swatches =
