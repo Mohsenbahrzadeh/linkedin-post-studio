@@ -1,0 +1,88 @@
+{
+  "id": "02-idempotency-fa",
+  "caption": "اپلیکیشن موبایل ما Retry داشت. منطقی هم بود: اگر شبکه قطع شد، تلاش دوباره.\n\nبعد یک مشتری نوشت: «من یک بار سفارش دادم، ۳ تا ثبت شده.»\n\nپاسخ در یک شبکهٔ ضعیف گم شده بود. Client فقط Timeout دید و دوباره فرستاد، ولی سرور سفارش را همان بار اول ثبت کرده بود. Timeout یعنی «پاسخ را نگرفتم»، نه «سرور کاری نکرد».\n\nراه‌حل: Idempotency Key. Client برای هر «قصد» یک شناسهٔ یکتا می‌سازد و در همهٔ Retryها همان را می‌فرستد. سرور Key را با پاسخ ذخیره می‌کند و به‌جای ساخت سفارش جدید، پاسخ قبلی را برمی‌گرداند.\n\nنکات مهم:\n- ثبت Key و سفارش در یک تراکنش\n- Unique Index روی Key\n- همان Key با بدنهٔ متفاوت: خطای ۴۲۲\n- برای Key یک TTL بگذارید\n\nهر وقت Retry اضافه می‌کنید بپرسید: اگر درخواست قبلی واقعاً موفق شده بود چه؟\n\nآیا APIهای شما Idempotency Key دارند؟\n\n#API #Idempotency #DotNet #Backend",
+  "rows": [
+    {
+      "kind": "title",
+      "text": "Retry بدون *Idempotency*، ۳ سفارش تکراری",
+      "fontSize": 50
+    },
+    {
+      "kind": "banner",
+      "text": "Timeout یعنی *«پاسخ را نگرفتم»*، نه *«سرور کاری نکرد»*."
+    },
+    {
+      "kind": "flow",
+      "nodesText": [
+        "Client | POST /orders | 📱",
+        "سرور | سفارش ثبت شد ✅ | 🗄️",
+        "شبکه | پاسخ گم شد، Client دوباره می‌فرستد | ⚠️"
+      ]
+    },
+    {
+      "vs": true,
+      "items": [
+        {
+          "kind": "problem",
+          "header": "بدون Key",
+          "intro": "هر Retry یک درخواست کاملاً جدید حساب می‌شود.",
+          "rowsText": [
+            "POST /orders | → order #1",
+            "POST /orders (retry) | → order #2",
+            "POST /orders (retry) | → order #3"
+          ],
+          "bulletsText": [
+            "یک کلیک، سه سفارش",
+            "هیچ خطایی دیده نمی‌شود",
+            "اول از همه پشتیبانی متوجه می‌شود"
+          ]
+        },
+        {
+          "kind": "solution",
+          "header": "با Idempotency-Key",
+          "intro": "Client برای همهٔ Retryهای یک قصد، یک Key می‌فرستد.",
+          "codeLinesText": [
+            "Idempotency-Key: 7b1c… | // same key",
+            "Order #1 | // returned 3×"
+          ],
+          "bulletsText": [
+            "Retry امن می‌شود",
+            "پاسخ ذخیره‌شده دوباره برگردانده می‌شود",
+            "برای پرداخت هم کار می‌کند"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "section",
+      "text": "سمت سرور"
+    },
+    {
+      "kind": "code",
+      "caption": "ASP.NET Core minimal API",
+      "fontSize": 15,
+      "code": "var existing = await db.IdempotencyRecords.FindAsync(key);\nif (existing is not null)\n    return Results.Json(existing.Response, statusCode: existing.StatusCode);\n\ndb.Orders.Add(order);\ndb.IdempotencyRecords.Add(new(key, 201, order.ToResponse()));\nawait db.SaveChangesAsync();   // one transaction, unique index on Key"
+    },
+    {
+      "items": [
+        {
+          "kind": "checklist",
+          "span": 1,
+          "itemsText": [
+            "ثبت Key و سفارش در یک تراکنش",
+            "Unique Index روی Key",
+            "همان Key با بدنهٔ دیگر ← خطای ۴۲۲",
+            "برای Key یک TTL بگذارید (مثلاً ۲۴ ساعت)"
+          ]
+        },
+        {
+          "kind": "quote",
+          "span": 1,
+          "text": "هر وقت Retry اضافه می‌کنید بپرسید: اگر درخواست قبلی واقعاً موفق شده بود چه؟",
+          "author": "— سؤالی که باید بپرسید",
+          "fontSize": 19
+        }
+      ]
+    }
+  ]
+}

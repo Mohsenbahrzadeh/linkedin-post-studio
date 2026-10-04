@@ -1,0 +1,19 @@
+﻿Our mobile app had retries. It made sense: if the network drops, try again.
+
+Then a customer wrote: "I placed one order and got three."
+
+The response had been lost on a weak network. The client saw a timeout and retried, but the server had already created the order. A timeout means "I didn't get a response", not "the server did nothing".
+
+The fix: an Idempotency-Key. The client sends one unique key per intent and reuses it on every retry. The server stores the key with the response, and returns the stored response instead of creating a new order.
+
+Details that matter:
+- Save the key and the order in one transaction
+- Put a unique index on the key
+- Same key with a different body returns 422
+- Give keys a TTL
+
+Whenever you add a retry, ask: what if the previous request actually succeeded?
+
+Do your APIs support idempotency keys?
+
+#API #Idempotency #DotNet #Backend

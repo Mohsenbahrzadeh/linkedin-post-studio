@@ -1,0 +1,29 @@
+{
+  "id": "01-nplus1-fa",
+  "caption": "ساعت ۱۰ صبح پنج‌شنبه بود که اولین هشدار آمد: CPU دیتابیس روی ۹۵٪.\n\nDeploy جدیدی نبود. فقط یک کمپین فروش ترافیک را ۳ برابر کرده بود.\n\nهمه می‌گفتند: «دیتابیس را Scale Up کنیم.»\n\nولی Trace چیز دیگری نشان می‌داد: یک درخواست به API سفارش‌ها، ۲۰۱ کوئری SQL اجرا می‌کرد. Lazy Loading. در Dev با ۱۰ رکورد (۲۱ کوئری و ۱۲۰ms) کسی نفهمید. در Production با ۱۰۰ رکورد و چند هزار درخواست در دقیقه، دیتابیس خوابید.\n\nراه‌حل ۱۰ خط کد بود: یک کوئری با Projection. CPU از ۹۵٪ به ۱۸٪ رسید. بدون هیچ Scale Up.\n\nدرس‌ها:\n۱. تست با دادهٔ کم، باگ‌های مقیاس را پنهان می‌کند؛ تعداد کوئری را در تست Assert کنید.\n۲. Lazy Loading را خاموش کنید.\n۳. در Dev هر SQL را لاگ کنید.\n۴. قبل از خرید سخت‌افزار، کوئری‌ها را بشمارید.\n\nشما تا حالا N+1 را کجا پیدا کرده‌اید؟\n\n#EFCore #CSharp #DotNet #Performance",
+  "rows": [
+    { "kind": "title", "text": "باگ Production به‌خاطر کوئری‌های *N+1*", "fontSize": 52 },
+    { "kind": "banner", "text": "*Dev:* ۲۱ کوئری و ۱۲۰ms. *Production:* ۲۰۱ کوئری در هر درخواست و *CPU دیتابیس ۹۵٪*." },
+    { "vs": true, "items": [
+      { "kind": "problem", "header": "کدی که بی‌خطر به نظر می‌رسید", "intro": "Lazy Loading برای هر ردیف یک کوئری اضافه می‌فرستد.",
+        "rowsText": ["SELECT * FROM Orders | 1×", "SELECT * FROM Customers | 100×", "SELECT COUNT(*) FROM Items | 100×"],
+        "bulletsText": ["در Dev با ۱۰ رکورد سریع بود", "زیر بار با ۱۰۰ رکورد کند شد", "نه خطا، نه هشدار"] },
+      { "kind": "solution", "header": "یک کوئری با Projection", "intro": "فقط چیزی را بخوانید که Endpoint برمی‌گرداند.",
+        "codeLinesText": ["1 query | // not 201", "CPU 95% | // now 18%"],
+        "bulletsText": ["بدون Lazy Loading", "بدون نیاز به Scale Up", "تعداد کوئری در تست Assert می‌شود"] }
+    ] },
+    { "kind": "section", "text": "راه‌حل" },
+    { "kind": "code", "caption": "EF Core", "fontSize": 16,
+      "code": "var orders = await db.Orders\n    .AsNoTracking()\n    .Take(100)\n    .Select(o => new OrderDto(o.Id, o.Customer.Name, o.Items.Count))\n    .ToListAsync();" },
+    { "items": [
+      { "kind": "stat", "value": "۲۰۱ ← ۱", "label": "کوئری در هر درخواست" },
+      { "kind": "stat", "value": "۹۵٪ ← ۱۸٪", "label": "CPU دیتابیس", "valueSize": 44 },
+      { "kind": "stat", "value": "۰", "label": "سرور اضافه" }
+    ] },
+    { "kind": "notes", "header": "درس‌هایی که گرفتیم", "bulletsText": [
+      "تست با دادهٔ کم، باگ‌های مقیاس را پنهان می‌کند؛ تعداد کوئری را در Integration Test چک کنید.",
+      "Lazy Loading را خاموش کنید. اگر داده لازم است، صریح بخواهیدش.",
+      "در Dev همیشه LogTo را روشن بگذارید تا هر کوئری دیده شود.",
+      "قبل از خرید سخت‌افزار، اول کوئری‌ها را بشمارید." ] }
+  ]
+}

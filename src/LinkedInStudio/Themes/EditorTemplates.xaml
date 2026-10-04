@@ -1,0 +1,419 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:inf="clr-namespace:LinkedInStudio.Infrastructure"
+                    xmlns:ctrl="clr-namespace:LinkedInStudio.Controls"
+                    xmlns:loc="clr-namespace:LinkedInStudio.Localization">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="DesignTokens.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <ObjectDataProvider x:Key="DirValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="inf:TextDir"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <Style x:Key="MultiBox" TargetType="TextBox" BasedOn="{StaticResource FieldBox}">
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="MinHeight" Value="60"/>
+        <Setter Property="MaxHeight" Value="150"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+    </Style>
+
+    <!-- ================= TITLE ================= -->
+    <DataTemplate x:Key="E.TitleItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="* … *  →  highlight"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Font], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.Fonts}" SelectedItem="{Binding Font}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="20" Maximum="80" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= BANNER ================= -->
+    <DataTemplate x:Key="E.BannerItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="* … *  →  highlight"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="12" Maximum="32" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= SECTION LABEL ================= -->
+    <DataTemplate x:Key="E.SectionLabelItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="12" Maximum="30" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= TEXT ================= -->
+    <DataTemplate x:Key="E.TextItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="10" Maximum="60" Value="{Binding FontSize}"/>
+            <CheckBox Content="{Binding [Props.Bold], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding Bold}" Margin="0,10,0,0"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Font], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.Fonts}" SelectedItem="{Binding Font}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Color, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= PROBLEM ================= -->
+    <DataTemplate x:Key="E.ProblemBoxItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Body], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Intro, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Lines], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" FontFamily="{StaticResource F.Code}" Text="{Binding RowsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Bullets], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding BulletsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= SOLUTION ================= -->
+    <DataTemplate x:Key="E.SolutionBoxItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Body], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Intro, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Lines], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" FontFamily="{StaticResource F.Code}" Text="{Binding CodeLinesText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Bullets], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding BulletsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= CODE ================= -->
+    <DataTemplate x:Key="E.CodeItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Language], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Language}">
+                <ComboBoxItem Content="csharp"/>
+                <ComboBoxItem Content="json"/>
+                <ComboBoxItem Content="none"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="9" Maximum="22" Value="{Binding FontSize}"/>
+            <CheckBox Content="{Binding [Props.Badge], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding ShowBadge}" Margin="0,10,0,0"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Code], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="140" MaxHeight="280" FontFamily="{StaticResource F.Code}"
+                     Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= NOTES ================= -->
+    <DataTemplate x:Key="E.NotesItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Bullets], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding BulletsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= REFERENCE ================= -->
+    <DataTemplate x:Key="E.ReferenceItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Lines], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="100" FontFamily="{StaticResource F.Code}"
+                     Text="{Binding LinesText, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= FLOW ================= -->
+    <DataTemplate x:Key="E.FlowItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Nodes], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="100" Text="{Binding NodesText, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= BENEFITS ================= -->
+    <DataTemplate x:Key="E.BenefitsItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Cards], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="100" Text="{Binding CardsText, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= IMAGE ================= -->
+    <DataTemplate x:Key="E.ImageItem">
+        <StackPanel>
+            <Button Content="{Binding [Props.ChooseImage], Source={x:Static loc:Localizer.Instance}}"
+                    Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    Command="{Binding DataContext.PickImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Path"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Fit"/>
+            <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Stretch}">
+                <ComboBoxItem Content="Uniform"/>
+                <ComboBoxItem Content="UniformToFill"/>
+                <ComboBoxItem Content="Fill"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Corner radius"/>
+            <Slider Minimum="0" Maximum="60" Value="{Binding Corner}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= VS ================= -->
+    <DataTemplate x:Key="E.VsBadgeItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- shared icon-combo template -->
+    <DataTemplate x:Key="IconOption">
+        <TextBlock Text="{Binding}" FontSize="18"/>
+    </DataTemplate>
+
+    <!-- ================= CUSTOM BOX ================= -->
+    <DataTemplate x:Key="E.CustomBoxItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Icon], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.Icons}" SelectedItem="{Binding Glyph}" ItemTemplate="{StaticResource IconOption}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Body], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Bullets], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding BulletsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Style], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Marker}">
+                <ComboBoxItem Content="Dot"/>
+                <ComboBoxItem Content="CheckCircle"/>
+                <ComboBoxItem Content="CrossCircle"/>
+                <ComboBoxItem Content="Info"/>
+                <ComboBoxItem Content="Number"/>
+                <ComboBoxItem Content="None"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Background], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Bg, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.BorderColor], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Border, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.TextColor], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Text, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= STAT ================= -->
+    <DataTemplate x:Key="E.StatItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Value], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Label], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="24" Maximum="90" Value="{Binding ValueSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= CHECKLIST ================= -->
+    <DataTemplate x:Key="E.ChecklistItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Items], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding ItemsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Style], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Style}">
+                <ComboBoxItem Content="Check"/>
+                <ComboBoxItem Content="Dot"/>
+                <ComboBoxItem Content="Number"/>
+                <ComboBoxItem Content="Arrow"/>
+                <ComboBoxItem Content="Cross"/>
+            </ComboBox>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="10" Maximum="30" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= QUOTE ================= -->
+    <DataTemplate x:Key="E.QuoteItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Author], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="12" Maximum="40" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= DIVIDER ================= -->
+    <DataTemplate x:Key="E.DividerItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Color, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Thickness], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="1" Maximum="16" Value="{Binding Thickness}"/>
+            <CheckBox Content="{Binding [Props.Dashed], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding Dashed}" Margin="0,10,0,0"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= ARROW ================= -->
+    <DataTemplate x:Key="E.ArrowItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Color, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Thickness], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="1" Maximum="16" Value="{Binding Thickness}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= PILL ================= -->
+    <DataTemplate x:Key="E.PillItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Text], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Background], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Bg, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.TextColor], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Fg, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="10" Maximum="28" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= PROGRESS ================= -->
+    <DataTemplate x:Key="E.ProgressItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Label], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Percent], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="0" Maximum="100" Value="{Binding Percent}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Background], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Track, Mode=TwoWay}"/>
+            <CheckBox Content="{Binding [Props.ShowPercent], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding ShowPercent}" Margin="0,10,0,0"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= ICON ================= -->
+    <DataTemplate x:Key="E.IconItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Icon], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{x:Static inf:Catalog.Icons}" SelectedItem="{Binding Glyph}" ItemTemplate="{StaticResource IconOption}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="16" Maximum="120" Value="{Binding IconSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Color, Mode=TwoWay}"/>
+            <CheckBox Content="{Binding [Props.ShowCircle], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding ShowCircle}" Margin="0,10,0,0"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Background], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding CircleColor, Mode=TwoWay}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= SCENE ================= -->
+    <DataTemplate x:Key="E.IllustrationItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.SceneNodes], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" Text="{Binding NodesText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="16" Maximum="120" Value="{Binding IconSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Color], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Arrow, Mode=TwoWay}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= TABLE ================= -->
+    <DataTemplate x:Key="E.TableItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.TableRows], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="110" Text="{Binding RowsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox Content="{Binding [Props.FirstRowHeader], Source={x:Static loc:Localizer.Instance}}" IsChecked="{Binding FirstRowHeader}" Margin="0,10,0,0"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="9" Maximum="32" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.TextColor], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Text, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= STEPS ================= -->
+    <DataTemplate x:Key="E.StepsItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Steps], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="110" Text="{Binding StepsText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="10" Maximum="32" Value="{Binding FontSize}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Accent], Source={x:Static loc:Localizer.Instance}}"/>
+            <ctrl:ColorPicker Color="{Binding Accent, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Direction], Source={x:Static loc:Localizer.Instance}}"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DirValues}}" SelectedItem="{Binding Dir}"/>
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- ================= TERMINAL ================= -->
+    <DataTemplate x:Key="E.TerminalItem">
+        <StackPanel>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Header], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Command], Source={x:Static loc:Localizer.Instance}}"/>
+            <TextBox Style="{StaticResource MultiBox}" MinHeight="120" FontFamily="{StaticResource F.Code}"
+                     Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+            <Slider Minimum="9" Maximum="30" Value="{Binding FontSize}"/>
+        </StackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

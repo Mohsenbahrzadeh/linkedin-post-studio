@@ -1,0 +1,14 @@
+﻿The order was saved, but the confirmation email never went out.
+
+The database and the message broker don't share a transaction. If the process crashes between SaveChanges and Publish, the two systems drift apart and nobody gets an error.
+
+The fix is the Transactional Outbox:
+1. Save the message in an OutboxMessages table, in the same transaction as the order
+2. A background worker reads it and publishes it
+3. Mark it as sent
+
+The guarantee is at-least-once delivery, so consumers must be idempotent (the Inbox pattern).
+
+Tools: MassTransit Outbox, CAP, Wolverine.
+
+#Microservices #EventDriven #DotNet #Architecture

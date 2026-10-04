@@ -1,0 +1,209 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============ COLORS (extracted from the reference template) ============ -->
+    <Color x:Key="C.PageBg">#FBFDFF</Color>
+    <Color x:Key="C.NavyDeep">#06152E</Color>
+    <Color x:Key="C.Navy">#0C2445</Color>
+    <Color x:Key="C.NavyText">#17233F</Color>
+    <Color x:Key="C.Muted">#5B6472</Color>
+    <Color x:Key="C.Divider">#E4E9F0</Color>
+
+    <Color x:Key="C.Green">#2E9E52</Color>
+    <Color x:Key="C.GreenDark">#1E8E4E</Color>
+    <Color x:Key="C.GreenBg">#E9F5EC</Color>
+    <Color x:Key="C.GreenBorder">#CBE7D3</Color>
+
+    <Color x:Key="C.Red">#D93A2E</Color>
+    <Color x:Key="C.RedDark">#C62828</Color>
+    <Color x:Key="C.RedBg">#FDECEA</Color>
+    <Color x:Key="C.RedBorder">#F3C9C5</Color>
+    <Color x:Key="C.RedRow">#FBE0DD</Color>
+
+    <Color x:Key="C.Amber">#E8912A</Color>
+    <Color x:Key="C.NotesBg">#FDF6EA</Color>
+    <Color x:Key="C.NotesBorder">#F3E2BF</Color>
+
+    <Color x:Key="C.Blue">#2F80D8</Color>
+    <Color x:Key="C.ClientBg">#EAF2FC</Color>
+    <Color x:Key="C.ClientBorder">#D2E4F8</Color>
+
+    <Color x:Key="C.Purple">#6C4BB6</Color>
+    <Color x:Key="C.NetBg">#F1ECFA</Color>
+    <Color x:Key="C.NetBorder">#E0D4F3</Color>
+
+    <Color x:Key="C.RefBg">#EBF1FA</Color>
+    <Color x:Key="C.RefBorder">#D6E2F2</Color>
+
+    <Color x:Key="C.CodeBg">#0C1C36</Color>
+    <Color x:Key="C.CodeBg2">#10213E</Color>
+
+    <!-- App chrome -->
+    <Color x:Key="C.AppBg">#EEF1F6</Color>
+    <Color x:Key="C.PanelBg">#FFFFFF</Color>
+    <Color x:Key="C.PanelBorder">#DCE1EA</Color>
+
+    <!-- ============ BRUSHES ============ -->
+    <SolidColorBrush x:Key="B.PageBg" Color="{StaticResource C.PageBg}"/>
+    <SolidColorBrush x:Key="B.Navy" Color="{StaticResource C.Navy}"/>
+    <SolidColorBrush x:Key="B.NavyText" Color="{StaticResource C.NavyText}"/>
+    <SolidColorBrush x:Key="B.Muted" Color="{StaticResource C.Muted}"/>
+    <SolidColorBrush x:Key="B.Divider" Color="{StaticResource C.Divider}"/>
+    <SolidColorBrush x:Key="B.Green" Color="{StaticResource C.Green}"/>
+    <SolidColorBrush x:Key="B.GreenDark" Color="{StaticResource C.GreenDark}"/>
+    <SolidColorBrush x:Key="B.GreenBg" Color="{StaticResource C.GreenBg}"/>
+    <SolidColorBrush x:Key="B.GreenBorder" Color="{StaticResource C.GreenBorder}"/>
+    <SolidColorBrush x:Key="B.Red" Color="{StaticResource C.Red}"/>
+    <SolidColorBrush x:Key="B.RedDark" Color="{StaticResource C.RedDark}"/>
+    <SolidColorBrush x:Key="B.RedBg" Color="{StaticResource C.RedBg}"/>
+    <SolidColorBrush x:Key="B.RedBorder" Color="{StaticResource C.RedBorder}"/>
+    <SolidColorBrush x:Key="B.RedRow" Color="{StaticResource C.RedRow}"/>
+    <SolidColorBrush x:Key="B.Amber" Color="{StaticResource C.Amber}"/>
+    <SolidColorBrush x:Key="B.NotesBg" Color="{StaticResource C.NotesBg}"/>
+    <SolidColorBrush x:Key="B.NotesBorder" Color="{StaticResource C.NotesBorder}"/>
+    <SolidColorBrush x:Key="B.Blue" Color="{StaticResource C.Blue}"/>
+    <SolidColorBrush x:Key="B.ClientBg" Color="{StaticResource C.ClientBg}"/>
+    <SolidColorBrush x:Key="B.ClientBorder" Color="{StaticResource C.ClientBorder}"/>
+    <SolidColorBrush x:Key="B.Purple" Color="{StaticResource C.Purple}"/>
+    <SolidColorBrush x:Key="B.NetBg" Color="{StaticResource C.NetBg}"/>
+    <SolidColorBrush x:Key="B.NetBorder" Color="{StaticResource C.NetBorder}"/>
+    <SolidColorBrush x:Key="B.RefBg" Color="{StaticResource C.RefBg}"/>
+    <SolidColorBrush x:Key="B.RefBorder" Color="{StaticResource C.RefBorder}"/>
+    <SolidColorBrush x:Key="B.AppBg" Color="{StaticResource C.AppBg}"/>
+    <SolidColorBrush x:Key="B.PanelBg" Color="{StaticResource C.PanelBg}"/>
+    <SolidColorBrush x:Key="B.PanelBorder" Color="{StaticResource C.PanelBorder}"/>
+    <SolidColorBrush x:Key="B.White" Color="#FFFFFF"/>
+
+    <LinearGradientBrush x:Key="B.NavyGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource C.Navy}" Offset="0"/>
+        <GradientStop Color="{StaticResource C.NavyDeep}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="B.CodeGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource C.CodeBg2}" Offset="0"/>
+        <GradientStop Color="{StaticResource C.CodeBg}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Code token brushes -->
+    <SolidColorBrush x:Key="B.CodeText" Color="#D5DCE8"/>
+    <SolidColorBrush x:Key="B.CodeKeyword" Color="#4FA6E0"/>
+    <SolidColorBrush x:Key="B.CodeType" Color="#38BDB0"/>
+    <SolidColorBrush x:Key="B.CodeString" Color="#E0A15E"/>
+    <SolidColorBrush x:Key="B.CodeNumber" Color="#C69AF0"/>
+    <SolidColorBrush x:Key="B.CodeComment" Color="#6FCF97"/>
+    <SolidColorBrush x:Key="B.CodePunct" Color="#9AA6BC"/>
+
+    <!-- ============ FONTS ============ -->
+    <FontFamily x:Key="F.Ui">Segoe UI</FontFamily>
+    <FontFamily x:Key="F.Fa">Vazirmatn, Segoe UI, Tahoma</FontFamily>
+    <FontFamily x:Key="F.Code">Cascadia Code, Consolas, Courier New</FontFamily>
+
+    <!-- ============ APP CONTROL STYLES ============ -->
+    <Style x:Key="ToolButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource B.NavyText}"/>
+        <Setter Property="FontFamily" Value="{StaticResource F.Ui}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="12,7"/>
+        <Setter Property="Margin" Value="2,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#E5EBF4"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
+        <Setter Property="Background" Value="{StaticResource B.Green}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource B.GreenDark}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Palette item button: a widget you can add to the canvas -->
+    <Style x:Key="PaletteButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource B.PanelBg}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource B.PanelBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{StaticResource B.NavyText}"/>
+        <Setter Property="FontFamily" Value="{StaticResource F.Ui}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#F2F6FC"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource B.Blue}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PanelHeader" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource F.Ui}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource B.Muted}"/>
+        <Setter Property="Margin" Value="4,10,4,4"/>
+    </Style>
+
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource F.Ui}"/>
+        <Setter Property="FontSize" Value="11.5"/>
+        <Setter Property="Foreground" Value="{StaticResource B.Muted}"/>
+        <Setter Property="Margin" Value="0,8,0,3"/>
+    </Style>
+
+    <Style TargetType="TextBox" x:Key="FieldBox">
+        <Setter Property="FontFamily" Value="{StaticResource F.Ui}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="6,5"/>
+        <Setter Property="BorderBrush" Value="{StaticResource B.PanelBorder}"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+</ResourceDictionary>

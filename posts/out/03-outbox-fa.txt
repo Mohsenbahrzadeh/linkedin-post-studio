@@ -1,0 +1,14 @@
+﻿سفارش ثبت شد، ولی ایمیل تأیید هیچ‌وقت نرفت.
+
+دیتابیس و Message Broker تراکنش مشترک ندارند. اگر پروسه بین SaveChanges و Publish کرش کند، دو سیستم بی‌صدا از هم جدا می‌شوند و هیچ خطایی دیده نمی‌شود.
+
+راه‌حل، Transactional Outbox است:
+۱. پیام را در همان تراکنش سفارش، در جدول OutboxMessages ذخیره کن
+۲. یک Background Worker آن را بخواند و منتشر کند
+۳. بعد از انتشار علامت‌گذاری شود
+
+تضمین، At-least-once Delivery است؛ پس Consumerها باید Idempotent باشند (الگوی Inbox).
+
+ابزارها: MassTransit Outbox، CAP، Wolverine.
+
+#Microservices #EventDriven #DotNet #Architecture

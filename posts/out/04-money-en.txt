@@ -1,0 +1,16 @@
+﻿Finance called: at month-end, the gateway total and our invoice total differed by 147 units.
+
+Small amount, but in accounting "almost right" means "wrong".
+
+Three mistakes caused it:
+1. double for money. 0.1 + 0.2 is 0.30000000000000004, and thousands of lines accumulate the error.
+2. Rounding in different places with different rules. Math.Round defaults to banker's rounding (2.5 becomes 2), accounting usually wants AwayFromZero.
+3. Splitting 100 between 3 people without deciding who gets the remainder: 33.33 x 3 = 99.99.
+
+The fix: decimal (or minor units as long), one explicit rounding policy, remainder allocation, and a Money value object that carries the currency.
+
+In a financial system, one wrong cent is a bug that has not been discovered yet.
+
+What type do you use for money?
+
+#CSharp #Fintech #DDD #BugStories

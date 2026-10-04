@@ -1,0 +1,75 @@
+{
+  "id": "03-outbox-fa",
+  "caption": "سفارش ثبت شد، ولی ایمیل تأیید هیچ‌وقت نرفت.\n\nدیتابیس و Message Broker تراکنش مشترک ندارند. اگر پروسه بین SaveChanges و Publish کرش کند، دو سیستم بی‌صدا از هم جدا می‌شوند و هیچ خطایی دیده نمی‌شود.\n\nراه‌حل، Transactional Outbox است:\n۱. پیام را در همان تراکنش سفارش، در جدول OutboxMessages ذخیره کن\n۲. یک Background Worker آن را بخواند و منتشر کند\n۳. بعد از انتشار علامت‌گذاری شود\n\nتضمین، At-least-once Delivery است؛ پس Consumerها باید Idempotent باشند (الگوی Inbox).\n\nابزارها: MassTransit Outbox، CAP، Wolverine.\n\n#Microservices #EventDriven #DotNet #Architecture",
+  "rows": [
+    {
+      "kind": "title",
+      "text": "الگوی *Outbox*: هیچ رویدادی گم نمی‌شود",
+      "fontSize": 50
+    },
+    {
+      "kind": "banner",
+      "text": "دیتابیس و Broker تراکنش مشترک ندارند. *SaveChanges موفق شد، ولی پیام نرسید.*"
+    },
+    {
+      "vs": true,
+      "items": [
+        {
+          "kind": "problem",
+          "header": "Dual Write",
+          "intro": "دو سیستم، دو Commit، و یک کرش بین آن‌ها.",
+          "rowsText": [
+            "SaveChangesAsync() | ✅",
+            "bus.Publish(event) | 💥"
+          ],
+          "bulletsText": [
+            "سفارش ثبت شد ولی رویداد گم شد",
+            "ایمیل تأیید هیچ‌وقت نرفت",
+            "دو سیستم بی‌صدا ناسازگار می‌شوند"
+          ]
+        },
+        {
+          "kind": "solution",
+          "header": "Transactional Outbox",
+          "intro": "رویداد را کنار داده بنویس و بعداً منتشر کن.",
+          "codeLinesText": [
+            "Orders + OutboxMessages | // one transaction",
+            "Worker → Broker | // publishes later"
+          ],
+          "bulletsText": [
+            "نوشتن اتمیک",
+            "تحویل At-least-once",
+            "Consumerها Idempotent می‌مانند"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "section",
+      "text": "چطور کار می‌کند"
+    },
+    {
+      "kind": "flow",
+      "nodesText": [
+        "API | ثبت سفارش + ردیف Outbox | 🗄️",
+        "Worker | خواندن و انتشار | ⚙️",
+        "Broker | Consumerها رویداد را پردازش می‌کنند | 📨"
+      ]
+    },
+    {
+      "kind": "code",
+      "caption": "EF Core",
+      "fontSize": 16,
+      "code": "db.Orders.Add(order);\ndb.OutboxMessages.Add(new OutboxMessage(new OrderCreated(order.Id)));\nawait db.SaveChangesAsync();   // atomic: the order and its event, or neither"
+    },
+    {
+      "kind": "benefits",
+      "cardsText": [
+        "اتمیک | داده و رویداد با هم | 🛡️",
+        "قابل‌اعتماد | با کرش هیچ‌چیز گم نمی‌شود | 📦",
+        "ساده | یک جدول و یک Worker | 🧩",
+        "آماده | MassTransit، CAP، Wolverine | 🚀"
+      ]
+    }
+  ]
+}

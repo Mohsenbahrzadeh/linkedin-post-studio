@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "LinkedInStudio",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/LinkedInStudio/LinkedInStudio.csproj"],
+      "port": 0
+    }
+  ]
+}

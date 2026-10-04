@@ -1,0 +1,19 @@
+﻿It was 10 AM on a Thursday when the first alert fired: database CPU at 95%.
+
+No new deploy. Just a sales campaign that tripled traffic.
+
+Everyone said: "Scale up the database."
+
+The traces said something else: one request to the orders API ran 201 SQL queries. Lazy loading. 10 rows in dev (21 queries, 120 ms). 100 rows in production, thousands of requests per minute.
+
+The fix was ~10 lines: one projected query. CPU went from 95% to 18%. No scale-up.
+
+What I took from it:
+1. Small test data hides scale bugs, so assert query counts in tests.
+2. Turn lazy loading off.
+3. Log SQL in dev.
+4. Count queries before buying hardware.
+
+Where have you found an N+1?
+
+#EFCore #CSharp #DotNet #Performance

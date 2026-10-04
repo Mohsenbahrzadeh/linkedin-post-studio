@@ -1,0 +1,60 @@
+<UserControl x:Class="LinkedInStudio.Controls.ColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:inf="clr-namespace:LinkedInStudio.Infrastructure"
+             x:Name="Root">
+    <UserControl.Resources>
+        <inf:BrushFromHexConverter x:Key="HexToBrush"/>
+    </UserControl.Resources>
+    <Grid>
+        <ToggleButton x:Name="Toggle" Height="30" Cursor="Hand" Background="White"
+                      BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1">
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" Padding="6,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="18" Height="18" CornerRadius="4" Margin="0,0,8,0"
+                                    BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1"
+                                    Background="{Binding Color, ElementName=Root, Converter={StaticResource HexToBrush}}"/>
+                            <TextBlock Text="{Binding Color, ElementName=Root}" VerticalAlignment="Center"
+                                       FontFamily="{StaticResource F.Ui}" FontSize="12" Foreground="{StaticResource B.NavyText}"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
+
+        <Popup IsOpen="{Binding IsChecked, ElementName=Toggle}" StaysOpen="False" AllowsTransparency="True"
+               Placement="Bottom" PopupAnimation="Fade">
+            <Border Background="White" BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1" CornerRadius="8"
+                    Padding="8" Margin="0,4,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="14" ShadowDepth="0" Opacity="0.2"/>
+                </Border.Effect>
+                <StackPanel Width="196">
+                    <ItemsControl x:Name="Swatches">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Width="26" Height="26" Margin="2" Cursor="Hand" Click="Swatch_Click" Tag="{Binding}">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border CornerRadius="5" BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1"
+                                                    Background="{Binding Converter={StaticResource HexToBrush}}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBox x:Name="HexBox" Margin="2,8,2,2" Padding="6,4" FontFamily="{StaticResource F.Ui}"
+                             Text="{Binding Color, ElementName=Root, UpdateSourceTrigger=PropertyChanged}"
+                             BorderBrush="{StaticResource B.PanelBorder}"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

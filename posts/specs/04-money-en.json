@@ -1,0 +1,90 @@
+{
+  "id": "04-money-en",
+  "caption": "Finance called: at month-end, the gateway total and our invoice total differed by 147 units.\n\nSmall amount, but in accounting \"almost right\" means \"wrong\".\n\nThree mistakes caused it:\n1. double for money. 0.1 + 0.2 is 0.30000000000000004, and thousands of lines accumulate the error.\n2. Rounding in different places with different rules. Math.Round defaults to banker's rounding (2.5 becomes 2), accounting usually wants AwayFromZero.\n3. Splitting 100 between 3 people without deciding who gets the remainder: 33.33 x 3 = 99.99.\n\nThe fix: decimal (or minor units as long), one explicit rounding policy, remainder allocation, and a Money value object that carries the currency.\n\nIn a financial system, one wrong cent is a bug that has not been discovered yet.\n\nWhat type do you use for money?\n\n#CSharp #Fintech #DDD #BugStories",
+  "rows": [
+    {
+      "kind": "title",
+      "text": "Why a Cent Went Missing: *double* vs *decimal*",
+      "fontSize": 50
+    },
+    {
+      "kind": "banner",
+      "text": "*0.1 + 0.2 = 0.30000000000000004.* In finance, \"almost right\" means wrong."
+    },
+    {
+      "vs": true,
+      "items": [
+        {
+          "kind": "problem",
+          "header": "double for money",
+          "intro": "Binary floating point can't represent most decimal fractions.",
+          "rowsText": [
+            "0.1 + 0.2 | 0.30000000000000004",
+            "0.1 + 0.2 == 0.3 | False",
+            "100 / 3 × 3 | 99.99"
+          ],
+          "bulletsText": [
+            "Tiny errors accumulate",
+            "Rounding differs per layer",
+            "Remainders silently vanish"
+          ]
+        },
+        {
+          "kind": "solution",
+          "header": "decimal + one policy",
+          "intro": "Exact decimals, explicit rounding, remainders allocated.",
+          "codeLinesText": [
+            "0.1m + 0.2m | // 0.3",
+            "Round(2.5m, 0, AwayFromZero) | // 3"
+          ],
+          "bulletsText": [
+            "decimal(18,2) in the database",
+            "One rounding rule, in one place",
+            "Parts always sum to the total"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "section",
+      "text": "Splitting money safely"
+    },
+    {
+      "kind": "code",
+      "caption": "Allocate the remainder",
+      "fontSize": 15,
+      "code": "public static IReadOnlyList<long> Allocate(long total, int parts)\n{\n    var share = total / parts;\n    var remainder = (int)(total % parts);\n    return Enumerable.Range(0, parts)\n        .Select(i => share + (i < remainder ? 1 : 0))\n        .ToList();\n}\n// Allocate(10000, 3) => [3334, 3333, 3333]   sums to 10000"
+    },
+    {
+      "items": [
+        {
+          "kind": "stat",
+          "value": "147",
+          "label": "units off at month-end",
+          "accent": "#D93A2E"
+        },
+        {
+          "kind": "stat",
+          "value": "3334 · 3333 · 3333",
+          "label": "100.00 split in 3, no cent lost",
+          "valueSize": 26
+        },
+        {
+          "kind": "stat",
+          "value": "1",
+          "label": "Money type, with currency"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "header": "Rules for money",
+      "bulletsText": [
+        "decimal for money, double for measurements.",
+        "Rounding is a business rule: explicit, in one place, documented.",
+        "When splitting, the parts must add up exactly to the total.",
+        "Model Money as its own type, not a plain number."
+      ]
+    }
+  ]
+}

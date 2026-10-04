@@ -1,0 +1,75 @@
+{
+  "id": "03-outbox-en",
+  "caption": "The order was saved, but the confirmation email never went out.\n\nThe database and the message broker don't share a transaction. If the process crashes between SaveChanges and Publish, the two systems drift apart and nobody gets an error.\n\nThe fix is the Transactional Outbox:\n1. Save the message in an OutboxMessages table, in the same transaction as the order\n2. A background worker reads it and publishes it\n3. Mark it as sent\n\nThe guarantee is at-least-once delivery, so consumers must be idempotent (the Inbox pattern).\n\nTools: MassTransit Outbox, CAP, Wolverine.\n\n#Microservices #EventDriven #DotNet #Architecture",
+  "rows": [
+    {
+      "kind": "title",
+      "text": "The *Outbox* Pattern: Never Lose an Event",
+      "fontSize": 50
+    },
+    {
+      "kind": "banner",
+      "text": "The database and the broker don't share a transaction. *SaveChanges succeeded, the message didn't.*"
+    },
+    {
+      "vs": true,
+      "items": [
+        {
+          "kind": "problem",
+          "header": "Dual write",
+          "intro": "Two systems, two commits, a crash in between.",
+          "rowsText": [
+            "SaveChangesAsync() | ✅",
+            "bus.Publish(event) | 💥"
+          ],
+          "bulletsText": [
+            "Order saved, event lost",
+            "Confirmation email never sent",
+            "Systems silently drift apart"
+          ]
+        },
+        {
+          "kind": "solution",
+          "header": "Transactional outbox",
+          "intro": "Write the event next to the data, publish it afterwards.",
+          "codeLinesText": [
+            "Orders + OutboxMessages | // one transaction",
+            "Worker → Broker | // publishes later"
+          ],
+          "bulletsText": [
+            "Atomic write",
+            "At-least-once delivery",
+            "Consumers stay idempotent"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "section",
+      "text": "How it works"
+    },
+    {
+      "kind": "flow",
+      "nodesText": [
+        "API | Saves order + outbox row | 🗄️",
+        "Worker | Reads and publishes | ⚙️",
+        "Broker | Consumers handle the event | 📨"
+      ]
+    },
+    {
+      "kind": "code",
+      "caption": "EF Core",
+      "fontSize": 16,
+      "code": "db.Orders.Add(order);\ndb.OutboxMessages.Add(new OutboxMessage(new OrderCreated(order.Id)));\nawait db.SaveChangesAsync();   // atomic: the order and its event, or neither"
+    },
+    {
+      "kind": "benefits",
+      "cardsText": [
+        "Atomic | State and event together | 🛡️",
+        "Reliable | Nothing lost on a crash | 📦",
+        "Simple | A table and a worker | 🧩",
+        "Ready-made | MassTransit, CAP, Wolverine | 🚀"
+      ]
+    }
+  ]
+}

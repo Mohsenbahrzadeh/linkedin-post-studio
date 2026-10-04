@@ -1,0 +1,261 @@
+<Window x:Class="LinkedInStudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctrl="clr-namespace:LinkedInStudio.Controls"
+        xmlns:loc="clr-namespace:LinkedInStudio.Localization"
+        Title="{Binding [App.Title], Source={x:Static loc:Localizer.Instance}}"
+        FlowDirection="{Binding Loc.AppFlow}"
+        Width="1280" Height="800" MinWidth="900" MinHeight="560"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Background="{StaticResource B.AppBg}" FontFamily="{StaticResource F.Fa}">
+
+    <DockPanel>
+        <!-- ================= TOOLBAR ================= -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource B.PanelBg}" BorderBrush="{StaticResource B.PanelBorder}"
+                BorderThickness="0,0,0,1" Padding="10,7">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding NewCommand}"
+                            Content="{Binding [Tool.New], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding OpenCommand}"
+                            Content="{Binding [Tool.Open], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding SaveCommand}"
+                            Content="{Binding [Tool.Save], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Border Width="1" Background="{StaticResource B.Divider}" Margin="8,4"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding UndoCommand}"
+                            Content="{Binding [Tool.Undo], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding RedoCommand}"
+                            Content="{Binding [Tool.Redo], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Border Width="1" Background="{StaticResource B.Divider}" Margin="8,4"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding FitCommand}"
+                            Content="{Binding [Tool.Fit], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding FitAllCommand}"
+                            Content="{Binding [Tool.FitAll], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Border Width="1" Background="{StaticResource B.Divider}" Margin="8,4"/>
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding ExportCommand}"
+                            Content="{Binding [Tool.Export], Source={x:Static loc:Localizer.Instance}}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding DuplicateCommand}"
+                            Content="{Binding [Tool.Duplicate], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding FrontCommand}"
+                            Content="{Binding [Tool.Front], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding BackCommand}"
+                            Content="{Binding [Tool.Back], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding DeleteCommand}" Foreground="{StaticResource B.Red}"
+                            Content="{Binding [Tool.Delete], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Border Width="1" Background="{StaticResource B.Divider}" Margin="8,4"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding LangCommand}"
+                            Content="{Binding [Tool.Lang], Source={x:Static loc:Localizer.Instance}}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True">
+                    <TextBlock Text="{Binding [Canvas.Width], Source={x:Static loc:Localizer.Instance}}"
+                               VerticalAlignment="Center" Foreground="{StaticResource B.Muted}" Margin="0,0,6,0"/>
+                    <TextBox Width="64" Style="{StaticResource FieldBox}"
+                             Text="{Binding Doc.CanvasWidth, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                    <TextBlock Text="×" VerticalAlignment="Center" Margin="8,0" Foreground="{StaticResource B.Muted}"/>
+                    <TextBox Width="64" Style="{StaticResource FieldBox}"
+                             Text="{Binding Doc.CanvasHeight, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding SetSizeCommand}" CommandParameter="portrait"
+                            Content="{Binding [Canvas.Portrait], Source={x:Static loc:Localizer.Instance}}"/>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding SetSizeCommand}" CommandParameter="square"
+                            Content="{Binding [Canvas.Square], Source={x:Static loc:Localizer.Instance}}"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ================= LEFT: WIDGETS / LAYERS ================= -->
+        <Border DockPanel.Dock="Left" Width="216" Background="{StaticResource B.PanelBg}"
+                BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="0,0,1,0">
+            <TabControl BorderThickness="0" Background="Transparent">
+                <TabItem Header="{Binding [Tab.Widgets], Source={x:Static loc:Localizer.Instance}}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Style="{StaticResource FieldLabel}" Margin="8,6"
+                                   Text="{Binding [Palette.Hint], Source={x:Static loc:Localizer.Instance}}" TextWrapping="Wrap"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Palette}" Margin="6">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate><UniformGrid Columns="2"/></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource PaletteButton}"
+                                                Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Glyph}" FontSize="18" FontWeight="Bold"
+                                                           HorizontalAlignment="Center" Foreground="{StaticResource B.Blue}"/>
+                                                <TextBlock HorizontalAlignment="Center" Margin="0,4,0,0" TextAlignment="Center"
+                                                           TextWrapping="Wrap" FontSize="11" Foreground="{StaticResource B.NavyText}">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding Converter="{StaticResource LocMulti}">
+                                                            <Binding Path="LabelKey"/>
+                                                            <Binding Path="Language" Source="{x:Static loc:Localizer.Instance}"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </TabItem>
+
+                <TabItem Header="{Binding [Tab.Layers], Source={x:Static loc:Localizer.Instance}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Items}" Margin="6">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="6" Margin="0,2" Padding="4,3" MouseLeftButtonDown="Layer_Click">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                        <Setter Property="Background" Value="#E9F0FB"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <DockPanel>
+                                            <ToggleButton DockPanel.Dock="Left" IsChecked="{Binding IsVisible}" Width="24" Height="24"
+                                                          Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Visible">
+                                                <TextBlock Text="👁" FontSize="13" HorizontalAlignment="Center"/>
+                                            </ToggleButton>
+                                            <ToggleButton DockPanel.Dock="Left" IsChecked="{Binding IsLocked}" Width="24" Height="24"
+                                                          Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Lock">
+                                                <TextBlock Text="🔒" FontSize="12" HorizontalAlignment="Center"/>
+                                            </ToggleButton>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                                <Button Content="▲" Width="22" Height="22" Style="{StaticResource ToolButton}" Padding="0"
+                                                        Command="{Binding DataContext.MoveUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <Button Content="▼" Width="22" Height="22" Style="{StaticResource ToolButton}" Padding="0"
+                                                        Command="{Binding DataContext.MoveDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <Button Content="🗑" Width="24" Height="22" Style="{StaticResource ToolButton}" Padding="0"
+                                                        Foreground="{StaticResource B.Red}" ToolTip="{Binding [Tool.Delete], Source={x:Static loc:Localizer.Instance}}"
+                                                        Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                            <TextBlock VerticalAlignment="Center" Margin="6,0" TextTrimming="CharacterEllipsis"
+                                                       Foreground="{StaticResource B.NavyText}" FontSize="12.5">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource LayerLabel}">
+                                                        <Binding Path="Name"/>
+                                                        <Binding Path="LabelKey"/>
+                                                        <Binding Path="Language" Source="{x:Static loc:Localizer.Instance}"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Border>
+
+        <!-- ================= RIGHT: PROPERTIES ================= -->
+        <Border DockPanel.Dock="Right" Width="320" Background="{StaticResource B.PanelBg}"
+                BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1,0,0,0">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource PanelHeader}" Margin="14,12,14,4"
+                           Text="{Binding [Props.Title], Source={x:Static loc:Localizer.Instance}}"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="14,0,14,14" LostKeyboardFocus="Props_LostFocus">
+                    <StackPanel>
+                        <!-- selected item editor -->
+                        <StackPanel Visibility="{Binding Selected, Converter={StaticResource NullToVis}, ConverterParameter=invert}">
+                            <Border Background="#F4F7FB" CornerRadius="8" Padding="10,8" Margin="0,4,0,10"
+                                    Visibility="{Binding Selected.HasFont, Converter={StaticResource BoolToVis}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{StaticResource B.NavyText}"
+                                               FontWeight="SemiBold" FontSize="12.5"
+                                               Text="{Binding [Props.FontSize], Source={x:Static loc:Localizer.Instance}}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button Command="{Binding FontSmallerCommand}" Width="42" Height="32" Background="White"
+                                                Style="{StaticResource ToolButton}" BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1"
+                                                FontWeight="Bold" FontSize="15" Content="A−"/>
+                                        <Button Command="{Binding FontBiggerCommand}" Width="42" Height="32" Background="White" Margin="8,0,0,0"
+                                                Style="{StaticResource ToolButton}" BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1"
+                                                FontWeight="Bold" FontSize="18" Content="A+"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <ContentControl Content="{Binding Selected}" ContentTemplateSelector="{StaticResource EditorSelector}"/>
+
+                            <Border Height="1" Background="{StaticResource B.Divider}" Margin="0,14"/>
+                            <TextBlock Style="{StaticResource FieldLabel}"
+                                       Text="{Binding [Props.Pos], Source={x:Static loc:Localizer.Instance}}"/>
+                            <UniformGrid Columns="2">
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="X" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding Selected.X, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                                </StackPanel>
+                                <StackPanel Margin="4,0,0,0">
+                                    <TextBlock Text="Y" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding Selected.Y, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,4,0">
+                                    <TextBlock Text="W" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding Selected.Width, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                                </StackPanel>
+                                <StackPanel Margin="4,0,0,0">
+                                    <TextBlock Text="H" Style="{StaticResource FieldLabel}"/>
+                                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding Selected.Height, UpdateSourceTrigger=LostFocus, StringFormat=0}"/>
+                                </StackPanel>
+                            </UniformGrid>
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Opacity], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Slider Minimum="0" Maximum="1" Value="{Binding Selected.Opacity}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Props.Rotation], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Slider Minimum="-180" Maximum="180" Value="{Binding Selected.Rotation}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Layers.Title], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Selected.Name, UpdateSourceTrigger=LostFocus}"/>
+                        </StackPanel>
+
+                        <!-- footer & canvas settings (no selection) -->
+                        <StackPanel Visibility="{Binding Selected, Converter={StaticResource NullToVis}}">
+                            <TextBlock Style="{StaticResource PanelHeader}" Text="{Binding [Footer.Title], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Name], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Role], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.Role, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Tagline], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.Tagline, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Email], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.Email, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.LinkedIn], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.LinkedIn, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Photo], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Button Style="{StaticResource ToolButton}" HorizontalAlignment="Left" Margin="0,2"
+                                    BorderBrush="{StaticResource B.PanelBorder}" BorderThickness="1"
+                                    Command="{Binding PickPhotoCommand}"
+                                    Content="{Binding [Props.ChooseImage], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,10,0,0"
+                                    Command="{Binding SaveProfileCommand}"
+                                    Content="{Binding [Footer.SaveProfile], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Border Height="1" Background="{StaticResource B.Divider}" Margin="0,14"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.CanvasBg], Source={x:Static loc:Localizer.Instance}}"/>
+                            <ctrl:ColorPicker Color="{Binding Doc.Background, Mode=TwoWay}"/>
+                            <Border Height="1" Background="{StaticResource B.Divider}" Margin="0,14"/>
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding [Footer.Caption], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Style="{StaticResource FieldBox}" Text="{Binding Doc.Caption, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True" TextWrapping="Wrap" MinHeight="140" VerticalScrollBarVisibility="Auto"
+                                     VerticalContentAlignment="Top"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- ================= CANVAS ================= -->
+        <ctrl:DesignerSurface x:Name="Surface"/>
+    </DockPanel>
+</Window>

@@ -1,0 +1,29 @@
+{
+  "id": "01-nplus1-en",
+  "caption": "It was 10 AM on a Thursday when the first alert fired: database CPU at 95%.\n\nNo new deploy. Just a sales campaign that tripled traffic.\n\nEveryone said: \"Scale up the database.\"\n\nThe traces said something else: one request to the orders API ran 201 SQL queries. Lazy loading. 10 rows in dev (21 queries, 120 ms). 100 rows in production, thousands of requests per minute.\n\nThe fix was ~10 lines: one projected query. CPU went from 95% to 18%. No scale-up.\n\nWhat I took from it:\n1. Small test data hides scale bugs, so assert query counts in tests.\n2. Turn lazy loading off.\n3. Log SQL in dev.\n4. Count queries before buying hardware.\n\nWhere have you found an N+1?\n\n#EFCore #CSharp #DotNet #Performance",
+  "rows": [
+    { "kind": "title", "text": "A Production Bug Caused by *N+1* Queries", "fontSize": 52 },
+    { "kind": "banner", "text": "*Dev:* 21 queries, 120 ms. *Production:* 201 queries per request and *95% database CPU*." },
+    { "vs": true, "items": [
+      { "kind": "problem", "header": "The code that looked fine", "intro": "Lazy loading fires one extra query for every row.",
+        "rowsText": ["SELECT * FROM Orders | 1×", "SELECT * FROM Customers | 100×", "SELECT COUNT(*) FROM Items | 100×"],
+        "bulletsText": ["Fast with 10 rows in dev", "Slow with 100 rows under load", "No error, no warning"] },
+      { "kind": "solution", "header": "One projected query", "intro": "Select only what the endpoint returns.",
+        "codeLinesText": ["1 query | // not 201", "CPU 95% | // now 18%"],
+        "bulletsText": ["No lazy loading", "No scale-up needed", "Query count asserted in tests"] }
+    ] },
+    { "kind": "section", "text": "The fix" },
+    { "kind": "code", "caption": "EF Core", "fontSize": 16,
+      "code": "var orders = await db.Orders\n    .AsNoTracking()\n    .Take(100)\n    .Select(o => new OrderDto(o.Id, o.Customer.Name, o.Items.Count))\n    .ToListAsync();" },
+    { "items": [
+      { "kind": "stat", "value": "201 → 1", "label": "queries per request" },
+      { "kind": "stat", "value": "95% → 18%", "label": "database CPU", "valueSize": 44 },
+      { "kind": "stat", "value": "0", "label": "servers added" }
+    ] },
+    { "kind": "notes", "header": "What we learned", "bulletsText": [
+      "Small test data hides scale bugs, so assert query counts in integration tests.",
+      "Turn lazy loading off. If you need the data, ask for it explicitly.",
+      "Keep LogTo on in dev so every query is visible.",
+      "Before buying hardware, count your queries." ] }
+  ]
+}

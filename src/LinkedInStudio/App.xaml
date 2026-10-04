@@ -1,0 +1,24 @@
+<Application x:Class="LinkedInStudio.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:inf="clr-namespace:LinkedInStudio.Infrastructure"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DesignTokens.xaml"/>
+                <ResourceDictionary Source="Themes/WidgetTemplates.xaml"/>
+                <ResourceDictionary Source="Themes/EditorTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <inf:KeyedTemplateSelector x:Key="WidgetSelector" Prefix="V."/>
+            <inf:KeyedTemplateSelector x:Key="EditorSelector" Prefix="E."/>
+            <inf:EnumMatchConverter x:Key="EnumMatch"/>
+            <inf:LocMultiConverter x:Key="LocMulti"/>
+            <inf:LayerLabelConverter x:Key="LayerLabel"/>
+            <inf:NullToVisibilityConverter x:Key="NullToVis"/>
+            <inf:InverseBoolConverter x:Key="InvBool"/>
+            <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
