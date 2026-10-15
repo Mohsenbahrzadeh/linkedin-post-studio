@@ -1,0 +1,9 @@
+﻿CQRS: split reads from writes.
+
+Commands change state through the domain model in one transaction. Queries are read-only, project straight into DTOs, and can use a denormalized read model. They are just two handlers — a command side and a query side.
+
+You don't need event sourcing or a second database to do CQRS. Reach for it when reads and writes scale or shape differently; skip it for simple CRUD.
+
+Are you using CQRS, and how far did you take it?
+
+#DotNet #CSharp #CQRS #SoftwareArchitecture #CleanArchitecture

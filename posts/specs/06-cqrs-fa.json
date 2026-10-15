@@ -1,0 +1,49 @@
+{
+  "id": "06-cqrs-fa",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "CQRS: جداسازی خواندن از نوشتن.\n\nفرمان‌ها (Commands) وضعیت را از طریق مدل دامنه و در یک تراکنش تغییر می‌دهند. کوئری‌ها (Queries) فقط می‌خوانند، مستقیم به DTO نگاشت می‌شوند و می‌توانند از مدل خواندنِ غیرنرمال استفاده کنند. این‌ها فقط دو هندلرند — یک سمت فرمان و یک سمت کوئری.\n\nبرای CQRS نه Event Sourcing لازم است نه پایگاه‌دادهٔ دوم. وقتی خواندن و نوشتن مقیاس یا شکل متفاوتی دارند سراغش برو؛ برای CRUD ساده رهایش کن.\n\nشما از CQRS استفاده می‌کنید؟ تا کجا جلو رفتید؟\n\n#DotNet #CSharp #CQRS #معماری_نرم_افزار",
+  "rows": [
+    { "kind": "title", "text": "CQRS: جداسازی *خواندن* از *نوشتن*", "dir": "Rtl", "fontSize": 42 },
+    { "kind": "text", "text": "یک مدل برای تغییر وضعیت، یک مدل برای خواندن آن.", "dir": "Rtl", "color": "#5B6472", "fontSize": 18 },
+
+    { "kind": "flow", "nodesText": [
+      "فرمان (Command) | اعتبارسنجی و تغییر وضعیت | ✍️",
+      "یک پایگاه‌داده | منبع حقیقت | 🗄️",
+      "کوئری (Query) | خواندنِ سریع و شکل‌یافته | 🔎"
+    ] },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "✍️  فرمان‌ها — نوشتن", "dir": "Rtl" },
+      { "kind": "section", "span": 1, "text": "🔎  کوئری‌ها — خواندن", "dir": "Rtl" }
+    ] },
+
+    { "items": [
+      { "kind": "code", "span": 1, "caption": "هندلر فرمان", "showBadge": true,
+        "code": "public async Task Handle(ShipOrder cmd)\n{\n    var order = await db.Orders\n        .FindAsync(cmd.OrderId);\n    order.Ship(cmd.ShippedAt);    // domain rules\n    await db.SaveChangesAsync();  // one transaction\n}" },
+      { "kind": "code", "span": 1, "caption": "هندلر کوئری", "showBadge": true,
+        "code": "public async Task<List<OrderCard>> Handle(\n    GetOrders q) =>\n    await db.Orders\n        .AsNoTracking()\n        .Where(o => o.Status == q.Status)\n        .Select(o => new OrderCard(\n            o.Id, o.Customer.Name, o.Total))\n        .ToListAsync();" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "کجا به‌درد می‌خورد", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "خواندن و نوشتن مقیاس متفاوتی دارند",
+          "نوشتنِ دامنه‌ایِ پیچیده، خواندنِ ساده و سریع",
+          "شکل داده برای خواندن و نوشتن فرق دارد"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "کجا زیادی است", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "CRUD ساده با یک شکل داده",
+          "اپ کوچک با یک تیم",
+          "سراغ Event Sourcing رفتن «محض احتیاط»"
+        ] }
+    ] },
+
+    { "kind": "quote", "dir": "Rtl", "accent": "#2F80D8", "fontSize": 20,
+      "text": "CQRS فقط دو هندلر است — یک سمت فرمان و یک سمت کوئری. نه Event Sourcing لازم است، نه پایگاه‌دادهٔ دوم.",
+      "author": "— ساده نگه‌ش دار" }
+  ]
+}

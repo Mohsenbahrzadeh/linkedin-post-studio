@@ -1,0 +1,49 @@
+{
+  "id": "06-cqrs-en",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "CQRS: split reads from writes.\n\nCommands change state through the domain model in one transaction. Queries are read-only, project straight into DTOs, and can use a denormalized read model. They are just two handlers — a command side and a query side.\n\nYou don't need event sourcing or a second database to do CQRS. Reach for it when reads and writes scale or shape differently; skip it for simple CRUD.\n\nAre you using CQRS, and how far did you take it?\n\n#DotNet #CSharp #CQRS #SoftwareArchitecture #CleanArchitecture",
+  "rows": [
+    { "kind": "title", "text": "CQRS: Split *Reads* from *Writes*", "dir": "Ltr", "fontSize": 44 },
+    { "kind": "text", "text": "One model for changing state, another for reading it.", "dir": "Ltr", "color": "#5B6472", "fontSize": 18 },
+
+    { "kind": "flow", "nodesText": [
+      "Command | validate & change state | ✍️",
+      "One database | the source of truth | 🗄️",
+      "Query | fast, shaped read | 🔎"
+    ] },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "✍️  Commands — write", "dir": "Ltr" },
+      { "kind": "section", "span": 1, "text": "🔎  Queries — read", "dir": "Ltr" }
+    ] },
+
+    { "items": [
+      { "kind": "code", "span": 1, "caption": "Command handler", "showBadge": true,
+        "code": "public async Task Handle(ShipOrder cmd)\n{\n    var order = await db.Orders\n        .FindAsync(cmd.OrderId);\n    order.Ship(cmd.ShippedAt);    // domain rules\n    await db.SaveChangesAsync();  // one transaction\n}" },
+      { "kind": "code", "span": 1, "caption": "Query handler", "showBadge": true,
+        "code": "public async Task<List<OrderCard>> Handle(\n    GetOrders q) =>\n    await db.Orders\n        .AsNoTracking()\n        .Where(o => o.Status == q.Status)\n        .Select(o => new OrderCard(\n            o.Id, o.Customer.Name, o.Total))\n        .ToListAsync();" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "When CQRS fits", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "Reads and writes scale differently",
+          "Rich domain writes, simple fast reads",
+          "Read and write need different shapes"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "When it's overkill", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "Simple CRUD with a single shape",
+          "A small app with one team",
+          "Reaching for event sourcing 'just in case'"
+        ] }
+    ] },
+
+    { "kind": "quote", "dir": "Ltr", "accent": "#2F80D8", "fontSize": 20,
+      "text": "CQRS is just two handlers — a command side and a query side. No event sourcing or second database required.",
+      "author": "— Keep it simple" }
+  ]
+}
