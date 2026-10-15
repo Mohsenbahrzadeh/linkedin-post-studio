@@ -21,9 +21,18 @@ broken direction — Persian not right‑aligned, English not left‑aligned. Th
 | --- | --- |
 | ![Inbox pattern](docs/images/sample-inbox.png) | ![Widgets](docs/images/widgets.png) |
 
+Mix the structured widgets with your own illustrations — drop any PNG onto the canvas with the **Image**
+widget, while the code and text stay accurate and editable:
+
+![Illustrated before/after](docs/images/sample-illustrated.png)
+
 The footer is yours and is set once (see **Your footer / profile**):
 
 ![Footer](docs/images/footer.png)
+
+> Example specs for these posts live in [`posts/specs`](posts/specs) (EN + FA), with the illustrations in
+> [`posts/assets/illustrations`](posts/assets/illustrations). Render them from the repo root with
+> `--spec posts/specs/05-repositories-hybrid-en.json --out posts/out`.
 
 ## Features
 - **Canvas designer**: click a widget to add it, drag to move, handles to resize, with **snapping +
