@@ -1,0 +1,3 @@
+﻿Repositories: abstraction or overhead? A real story — before vs after.
+
+#DotNet #CSharp #EFCore #SoftwareArchitecture

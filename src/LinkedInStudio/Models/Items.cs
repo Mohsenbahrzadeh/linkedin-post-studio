@@ -399,11 +399,14 @@ public sealed class ImageItem : ItemBase
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(_path) || !File.Exists(_path)) return null;
+                if (string.IsNullOrWhiteSpace(_path)) return null;
+                // Resolve relative paths (e.g. in portable spec files) against the working directory.
+                var full = System.IO.Path.GetFullPath(_path);
+                if (!File.Exists(full)) return null;
                 var bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.CacheOption = BitmapCacheOption.OnLoad;
-                bmp.UriSource = new Uri(_path);
+                bmp.UriSource = new Uri(full);
                 bmp.EndInit();
                 bmp.Freeze();
                 return bmp;

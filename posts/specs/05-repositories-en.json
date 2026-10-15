@@ -1,0 +1,60 @@
+{
+  "id": "05-repositories-en",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "Repositories: abstraction or overhead?\n\nTwo years ago we started every project with IRepository<T> and IUnitOfWork. Then a simple feature needed 8 nearly identical methods — and the mocked tests proved nothing, because a mock has no idea what SQL EF Core generates.\n\nThe turning point: DbSet<T> is already a repository and DbContext is already the unit of work. We deleted the layer, wrote the query with LINQ, and tested it against a real database with Testcontainers.\n\nTo be fair, repositories still earn their keep for a DDD aggregate root or a repeated Specification. But abstracting for 'maybe we'll switch databases someday' almost never pays off — and you pay for it every day.\n\nDid you keep your repositories or remove them?\n\n#DotNet #CSharp #EFCore #SoftwareArchitecture #CleanArchitecture",
+  "rows": [
+    { "kind": "title", "text": "Repositories: Abstraction or *Overhead*?", "dir": "Ltr", "fontSize": 42 },
+    { "kind": "text", "text": "A real story from our codebase…", "dir": "Ltr", "color": "#5B6472", "fontSize": 18 },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "📅  Two years ago", "dir": "Ltr" },
+      { "kind": "section", "span": 1, "text": "💡  The turning point", "dir": "Ltr" }
+    ] },
+
+    { "items": [
+      { "kind": "code", "span": 1, "caption": "The first thing we did", "showBadge": true,
+        "code": "public interface IRepository<T> { ... }\npublic class Repository<T> : IRepository<T> { ... }\npublic interface IUnitOfWork { ... }" },
+      { "kind": "text", "span": 1, "dir": "Ltr",
+        "text": "We realized DbContext already does exactly this. DbSet<T> is a repository and DbContext is the unit of work — we had put a valueless layer of indirection on top." }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "What did that feature take?", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "A new method on IOrderRepository",
+          "An implementation with Include + ThenInclude",
+          "It loaded whole entities (couldn't Select into a DTO)",
+          "More methods for paging and the new filter",
+          "8 nearly identical methods in one repository"
+        ] },
+      { "kind": "code", "span": 1, "caption": "What we changed", "showBadge": true,
+        "code": "await db.Orders\n    .AsNoTracking()\n    .Where(o => o.Status == q.Status)\n    .OrderByDescending(o => o.UpdatedAt)\n    .Select(o => new OrderListItem(\n        o.Id, o.Customer.Name, o.Items.Count))\n    .ToListAsync();" }
+    ] },
+
+    { "kind": "scene", "nodesText": ["🐳 | #2F80D8", "🗄️ | #6C4BB6", "✅ | #2E9E52"] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "The mocked tests proved nothing", "glyph": "⚠️",
+        "bg": "#FDF6EA", "border": "#F3E2BF", "accent": "#E8912A", "marker": "None", "bulletsText": "",
+        "body": "The unit tests mocked all of it and proved nothing real — a mock has no idea what SQL EF Core generates." },
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "The result", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "Less code, fewer layers",
+          "Better-optimized queries (reads exactly what it needs)",
+          "Tests exercise real SQL with Testcontainers"
+        ] }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "To be fair", "glyph": "🎯",
+        "bg": "#EAF2FC", "border": "#D2E4F8", "accent": "#2F80D8", "marker": "None", "bulletsText": "",
+        "body": "Repositories still earn their keep for a DDD aggregate root, or when complex query logic repeats (the Specification pattern)." },
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "The lesson", "glyph": "📘",
+        "bg": "#EEF1F6", "border": "#DCE1EA", "accent": "#17233F", "marker": "None", "bulletsText": "",
+        "body": "Abstracting for 'maybe we'll switch databases someday' almost never pays off — but you pay for it every day." }
+    ] }
+  ]
+}

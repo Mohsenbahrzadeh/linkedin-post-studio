@@ -1,0 +1,41 @@
+{
+  "id": "05-repositories-fa",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "ریپازیتوری: انتزاع یا سربار؟ یک تجربهٔ واقعی — قبل و بعد.\n\n#DotNet #CSharp #EFCore #معماری_نرم_افزار",
+  "rows": [
+    { "kind": "title", "text": "ریپازیتوری: انتزاع یا *سربار*؟", "dir": "Rtl", "fontSize": 42 },
+    { "kind": "text", "text": "یک تجربهٔ واقعی از کدِ خودمان…", "dir": "Rtl", "color": "#5B6472", "fontSize": 18 },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "📅  دو سال پیش", "dir": "Rtl" },
+      { "kind": "section", "span": 1, "text": "💡  نقطهٔ عطف", "dir": "Rtl" }
+    ] },
+
+    { "items": [
+      { "kind": "image", "span": 1, "height": 300, "corner": 16, "stretch": "Uniform", "path": "posts/assets/illustrations/dev-overhead.png" },
+      { "kind": "image", "span": 1, "height": 300, "corner": 16, "stretch": "Uniform", "path": "posts/assets/illustrations/dev-clean.png" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "انتزاع چه هزینه‌ای داشت", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "۸ متدِ تقریباً یکسان در یک ریپازیتوری",
+          "کل انتیتی را می‌خواند (بدون Select به DTO)",
+          "تست‌های Mock که هیچ چیز واقعی را اثبات نمی‌کردند",
+          "لایه‌ای که فقط به DbContext فوروارد می‌کرد"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "نتیجه", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "DbSet<T> همان ریپازیتوری است و DbContext همان Unit of Work",
+          "کد کمتر و کوئری‌های بهینه‌تر",
+          "تست‌ها SQL واقعی را با Testcontainers اجرا می‌کنند"
+        ] }
+    ] },
+
+    { "kind": "code", "caption": "چه چیزی را عوض کردیم", "showBadge": true,
+      "code": "await db.Orders\n    .AsNoTracking()\n    .Where(o => o.Status == q.Status)\n    .OrderByDescending(o => o.UpdatedAt)\n    .Select(o => new OrderListItem(\n        o.Id, o.Customer.Name, o.Items.Count))\n    .ToListAsync();" }
+  ]
+}

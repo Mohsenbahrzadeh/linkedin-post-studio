@@ -1,0 +1,41 @@
+{
+  "id": "05-repositories-hybrid-en",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "Repositories: abstraction or overhead? A real story — before vs after.\n\n#DotNet #CSharp #EFCore #SoftwareArchitecture",
+  "rows": [
+    { "kind": "title", "text": "Repositories: Abstraction or *Overhead*?", "dir": "Ltr", "fontSize": 40 },
+    { "kind": "text", "text": "A real story from our codebase…", "dir": "Ltr", "color": "#5B6472", "fontSize": 18 },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "📅  Two years ago", "dir": "Ltr" },
+      { "kind": "section", "span": 1, "text": "💡  The turning point", "dir": "Ltr" }
+    ] },
+
+    { "items": [
+      { "kind": "image", "span": 1, "height": 300, "corner": 16, "stretch": "Uniform", "path": "posts/assets/illustrations/dev-overhead.png" },
+      { "kind": "image", "span": 1, "height": 300, "corner": 16, "stretch": "Uniform", "path": "posts/assets/illustrations/dev-clean.png" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "What the abstraction cost us", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "8 nearly identical repository methods",
+          "It loaded whole entities (no Select into a DTO)",
+          "Mocked tests that proved nothing real",
+          "A layer that just forwarded to DbContext"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "The result", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "DbSet<T> is the repository, DbContext the unit of work",
+          "Less code, better-optimized queries",
+          "Tests exercise real SQL with Testcontainers"
+        ] }
+    ] },
+
+    { "kind": "code", "caption": "What we changed", "showBadge": true,
+      "code": "await db.Orders\n    .AsNoTracking()\n    .Where(o => o.Status == q.Status)\n    .OrderByDescending(o => o.UpdatedAt)\n    .Select(o => new OrderListItem(\n        o.Id, o.Customer.Name, o.Items.Count))\n    .ToListAsync();" }
+  ]
+}

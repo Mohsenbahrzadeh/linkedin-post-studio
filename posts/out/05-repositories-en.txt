@@ -1,0 +1,11 @@
+﻿Repositories: abstraction or overhead?
+
+Two years ago we started every project with IRepository<T> and IUnitOfWork. Then a simple feature needed 8 nearly identical methods — and the mocked tests proved nothing, because a mock has no idea what SQL EF Core generates.
+
+The turning point: DbSet<T> is already a repository and DbContext is already the unit of work. We deleted the layer, wrote the query with LINQ, and tested it against a real database with Testcontainers.
+
+To be fair, repositories still earn their keep for a DDD aggregate root or a repeated Specification. But abstracting for 'maybe we'll switch databases someday' almost never pays off — and you pay for it every day.
+
+Did you keep your repositories or remove them?
+
+#DotNet #CSharp #EFCore #SoftwareArchitecture #CleanArchitecture
