@@ -1,0 +1,52 @@
+{
+  "id": "07-result-fa",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "استثناء یا Result؟\n\nاستثناء برای موارد استثنایی است. وقتی خطا موردانتظار است — پیدا نشدن، ورودی نامعتبر، قاعده‌ای که برقرار نشد — آن را به‌صورت داده مدل کن و Result<T> برگردان. خطا در امضای متد دیده می‌شود، فراخواننده باید مدیریتش کند، و بدون try/catch روی مسیر اصلی ترکیب می‌کنی.\n\nبرای نقضِ invariant، خطای واقعاً غیرمنتظرهٔ I/O، یا هر چیزی که این لایه نمی‌تواند مدیریت کند، هنوز استثناء پرتاب کن.\n\nشما Result برمی‌گردانید یا استثناء پرتاب می‌کنید؟ مرز را کجا می‌کشید؟\n\n#DotNet #CSharp #CleanCode #معماری_نرم_افزار",
+  "rows": [
+    { "kind": "title", "text": "استثناء یا *Result*؟", "dir": "Rtl", "fontSize": 44 },
+    { "kind": "text", "text": "استثناء برای موارد استثنایی؛ خطاهای موردانتظار را به‌صورت داده مدل کن.", "dir": "Rtl", "color": "#5B6472", "fontSize": 18 },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "❌  پرتاب استثناء برای خطای موردانتظار", "dir": "Rtl" },
+      { "kind": "section", "span": 1, "text": "✅  برگرداندن Result", "dir": "Rtl" }
+    ] },
+
+    { "items": [
+      { "kind": "code", "span": 1, "caption": "پرتاب استثناء", "showBadge": true,
+        "code": "public Order Get(int id)\n{\n    var order = db.Find(id);\n    if (order is null)\n        throw new NotFoundException(id); // expected!\n    return order;\n}" },
+      { "kind": "code", "span": 1, "caption": "برگرداندن Result", "showBadge": true,
+        "code": "public Result<Order> Get(int id)\n{\n    var order = db.Find(id);\n    return order is null\n        ? Result.Fail(\"Order not found\")\n        : Result.Ok(order);\n}" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "مشکلِ پرتاب استثناء", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "جریان کنترل پنهان در try/catch",
+          "خطا در امضای متد دیده نمی‌شود",
+          "فراموش‌کردن catch آسان است",
+          "روی مسیرهای داغ کند است"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Rtl", "header": "چرا Result", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "خطای موردانتظار در نوع خروجی است",
+          "فراخواننده باید موفقیت و خطا را مدیریت کند",
+          "ترکیب با Map / Bind بدون غافلگیری"
+        ] }
+    ] },
+
+    { "kind": "custombox", "dir": "Rtl", "header": "کِی هنوز استثناء پرتاب کنیم", "glyph": "⚠️",
+      "bg": "#FDF6EA", "border": "#F3E2BF", "accent": "#E8912A", "marker": "Info",
+      "bulletsText": [
+        "نقضِ یک ثابت (invariant) یا باگ",
+        "خطای واقعاً غیرمنتظرهٔ I/O یا شبکه",
+        "هیچ‌جای این‌جا نمی‌تواند آن را مدیریت کند"
+      ] },
+
+    { "kind": "quote", "dir": "Rtl", "accent": "#2F80D8", "fontSize": 20,
+      "text": "استثناء برای موارد استثنایی؛ Result برای موارد موردانتظار.",
+      "author": "— یک قاعدهٔ ساده" }
+  ]
+}

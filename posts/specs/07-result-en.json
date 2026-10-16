@@ -1,0 +1,52 @@
+{
+  "id": "07-result-en",
+  "width": 1080,
+  "colGap": 28,
+  "caption": "Exceptions or Result?\n\nExceptions are for the exceptional. When a failure is expected — not found, invalid input, a rule that didn't pass — model it as data and return a Result<T>. The failure lives in the signature, callers must handle it, and you compose without try/catch on the happy path.\n\nStill throw for broken invariants, truly unexpected I/O, or anything this layer can't sensibly handle.\n\nDo you return Result or throw? Where do you draw the line?\n\n#DotNet #CSharp #CleanCode #SoftwareArchitecture",
+  "rows": [
+    { "kind": "title", "text": "Exceptions or *Result*?", "dir": "Ltr", "fontSize": 44 },
+    { "kind": "text", "text": "Exceptions are for the exceptional — model expected failures as data.", "dir": "Ltr", "color": "#5B6472", "fontSize": 18 },
+
+    { "items": [
+      { "kind": "section", "span": 1, "text": "❌  Throwing for expected failures", "dir": "Ltr" },
+      { "kind": "section", "span": 1, "text": "✅  Returning a Result", "dir": "Ltr" }
+    ] },
+
+    { "items": [
+      { "kind": "code", "span": 1, "caption": "Throwing", "showBadge": true,
+        "code": "public Order Get(int id)\n{\n    var order = db.Find(id);\n    if (order is null)\n        throw new NotFoundException(id); // expected!\n    return order;\n}" },
+      { "kind": "code", "span": 1, "caption": "Returning a Result", "showBadge": true,
+        "code": "public Result<Order> Get(int id)\n{\n    var order = db.Find(id);\n    return order is null\n        ? Result.Fail(\"Order not found\")\n        : Result.Ok(order);\n}" }
+    ] },
+
+    { "items": [
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "The problem with throwing", "glyph": "❌",
+        "bg": "#FDECEA", "border": "#F3C9C5", "accent": "#D93A2E", "marker": "CrossCircle",
+        "bulletsText": [
+          "Control flow hidden in try/catch",
+          "The failure isn't in the signature",
+          "Easy to forget to catch it",
+          "Expensive on hot paths"
+        ] },
+      { "kind": "custombox", "span": 1, "dir": "Ltr", "header": "Why Result", "glyph": "✅",
+        "bg": "#E9F5EC", "border": "#CBE7D3", "accent": "#1E8E4E", "marker": "CheckCircle",
+        "bulletsText": [
+          "Expected failures live in the return type",
+          "Callers must handle success and error",
+          "Compose with Map / Bind, no surprises"
+        ] }
+    ] },
+
+    { "kind": "custombox", "dir": "Ltr", "header": "Still throw for the exceptional", "glyph": "⚠️",
+      "bg": "#FDF6EA", "border": "#F3E2BF", "accent": "#E8912A", "marker": "Info",
+      "bulletsText": [
+        "A broken invariant or a bug",
+        "Truly unexpected I/O or network errors",
+        "Nothing here can sensibly handle it"
+      ] },
+
+    { "kind": "quote", "dir": "Ltr", "accent": "#2F80D8", "fontSize": 20,
+      "text": "Exceptions for the exceptional; Result for the expected.",
+      "author": "— A simple rule" }
+  ]
+}

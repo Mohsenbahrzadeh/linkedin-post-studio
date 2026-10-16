@@ -1,0 +1,9 @@
+﻿Exceptions or Result?
+
+Exceptions are for the exceptional. When a failure is expected — not found, invalid input, a rule that didn't pass — model it as data and return a Result<T>. The failure lives in the signature, callers must handle it, and you compose without try/catch on the happy path.
+
+Still throw for broken invariants, truly unexpected I/O, or anything this layer can't sensibly handle.
+
+Do you return Result or throw? Where do you draw the line?
+
+#DotNet #CSharp #CleanCode #SoftwareArchitecture
